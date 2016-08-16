@@ -1,0 +1,182 @@
+@import "fonts.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    color: #37519b;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.row {
+    padding: 0 60px;
+}
+
+h1, h2, h3 {
+    left: -15px;
+    margin-bottom: 18px;
+    font: normal 150px/150px "DecimaMonoPro-Bold", sans-serif;
+    letter-spacing: 7.2px;
+}
+
+h1:before {
+    content: url("../img/GAAB/heading-circular-pattern.png");
+    position: absolute;
+    top: -63px;
+    left: 13px;
+}
+
+h2 {
+    font: 40px/40px "DecimaMonoPro-Bold", sans-serif;
+    left: -3px;
+    margin: 134px 0 16px 0;
+    text-transform: uppercase;
+}
+
+h2 span {
+    position: absolute;
+    bottom: 5px;
+    left: -67px;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+h3 {
+    font: 24px/24px "DecimaMonoPro-Bold", sans-serif;
+    left: 0;
+}
+
+.description {
+    font: 25px/40px "Roboto-Bold", sans-serif;
+    text-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.description span {
+    color: #ffaebb;
+}
+
+.wave-block {
+    font: 24px/40px "DecimaMonoPro", sans-serif;
+    background-color: #fff;
+    -webkit-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+}
+
+.wave-block:before {
+    content: "";
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    background: url('../img/GAAB/wave.png') center;
+    z-index: 2;
+}
+
+.blue-waves:after {
+    content: "";
+    height: 14px;
+    width: 100%;
+    position: absolute;
+    bottom: -14px;
+    left: 0;
+    background: url('../img/GAAB/blue-wave.png') center;
+    z-index: 1;
+}
+
+.info-block {
+    margin-top: 102px;
+}
+
+.info-block p {
+    font: 14px/20px "Roboto-Medium", sans-serif;
+}
+
+.info-block span {
+    color: #f57090;
+}
+
+.section-description {
+    font: 17px/30px "Roboto-Bold", sans-serif;
+}
+
+.top-section {
+    padding: 212px 60px 58px 60px;
+    background: url('../img/GAAB/top-section-background.png') center/auto 100% no-repeat;
+}
+
+.top-section .wave-block {
+    position: absolute;
+    top: 148px;
+    padding: 63px 80px 58px 80px;
+    margin: 0 auto -121px auto;
+    max-width: 655px;
+}
+
+.section-description {
+    margin-bottom: 43px;
+}
+
+.patterns .blue-waves {
+    max-width: 516px;
+    padding: 60px 31px 61px 65px;
+    z-index: 1;
+}
+
+.side-text {
+    position: absolute;
+    top: 153px;
+    left: -52px;
+    font: 14px/14px "Roboto-Medium", sans-serif;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.patterns img, .flowers-concept img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.result-patterns img {
+    margin-top: -7.2727272727%;
+    position: absolute;
+}
+
+.flowers-container {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.flowers-container img {
+    margin-top: -29.7%;
+    left: -70px;
+    width: 166.56716418%;
+}
+
+.arrow {
+    max-width: 54px;
+    left: -37px;
+    margin-top: 157px;
+}
+
+@media screen and (max-width: 1350px) {
+
+    .arrow {
+        left: 0;
+    }
+
+}
+
+

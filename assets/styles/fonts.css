@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'DecimaMonoPro';
+    src: url('../fonts/DecimaMonoPro/DecimaMonoPro.eot');
+    src: url('../fonts/DecimaMonoPro/DecimaMonoPro.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/DecimaMonoPro/DecimaMonoPro.woff') format('woff'),
+    url('../fonts/DecimaMonoPro/DecimaMonoPro.ttf') format('truetype'),
+    url('../fonts/DecimaMonoPro/DecimaMonoPro.svg#Sri-TSCRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'DecimaMonoPro-Bold';
+    src: url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.eot');
+    src: url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.woff') format('woff'),
+    url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.ttf') format('truetype'),
+    url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.svg#Sri-TSCRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-Bold';
+    src: url('../fonts/Roboto-Bold/Roboto-Bold.eot');
+    src: url('../fonts/Roboto-Bold/Roboto-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/Roboto-Bold/Roboto-Bold.woff') format('woff'),
+    url('../fonts/Roboto-Bold/Roboto-Bold.ttf') format('truetype'),
+    url('../fonts/Roboto-Bold/Roboto-Bold.svg#Sri-TSCRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-Medium';
+    src: url('../fonts/Roboto-Medium/Roboto-Medium.eot');
+    src: url('../fonts/Roboto-Medium/Roboto-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/Roboto-Medium/Roboto-Medium.woff') format('woff'),
+    url('../fonts/Roboto-Medium/Roboto-Medium.ttf') format('truetype'),
+    url('../fonts/Roboto-Medium/Roboto-Medium.svg#Sri-TSCRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -1,0 +1,72 @@
+* {
+    margin: 0;
+    padding: 0;
+    color: #37519b;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+}
+
+@top-color: #ffe8e1;
+
+.transition(@value) {
+    -webkit-transition: @value;
+    -moz-transition: @value;
+    -ms-transition: @value;
+    -o-transition: @value;
+    transition: @value;
+}
+
+.image-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.top-section {
+    background: #fef9f4 url('../img/creamy-noise-pattern.png');
+    .transition(height 100ms);
+    overflow: hidden;
+}
+
+.background() {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.background-rectangle {
+    .background();
+    padding: 60px;
+    background: #ffe8e1 content-box;
+}
+
+.bone(@class, @width, @left, @top) {
+    .@{class} {
+        width: @width;
+        top: @top;
+        left: @left;
+    }
+}
+
+.bones {
+    .background();
+    .transition(~"top 0.5s ease-out, left 0.5s ease-out");
+
+    div {
+        position: absolute;
+    }
+
+    .bone(arc-bone, 29.861111111%, -2.1527777778%, 1.6666666667%);
+    .bone(arc-lil-sibling, 18.402777778%, 9.7916666667%, 11.222222222%);
+    .bone(sine-cavity-bone, 42.986111111%, 13.888888889%, 3.5555555556%);
+    .bone(mussel-shell, 23.333333333%, 54.375%, -3.5555555556%);
+    .bone(cloth, 48.472222222%, 53.402777778%, 22%);
+    .bone(spiral-shell, 28.680555556%, 74.236111111%, 55.555555556%);
+    .bone(saddle-bone, 38.055555556%, 37.291666667%, 58.777777778%);
+    .bone(funnel-bone, 40.347222222%, 3.3333333333%, 53.333333333%);
+    .bone(overlapping-bones, 31.111111111%, -4.583333333%, 43%);
+    .bone(tooth, 11.319444444%, 2.5%, 29.777777778%);
+    .bone(parabolic-bone, 15.138888889%, 42.430555556%, 47.333333333%);
+}

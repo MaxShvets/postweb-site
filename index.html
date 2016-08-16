@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects</title>
+    <link href="assets/styles/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/styles/style.less" rel="stylesheet/less">
+</head>
+<body>
+
+    <div class="container-fluid"></div>
+
+    <script id="body" type="text/html">
+
+        <div class="row top-section">
+            <div class="background-rectangle"></div>
+
+            <div class="bones">
+                <% for (var boneIndex = 0; boneIndex < bones.length; boneIndex++) { %>
+                    <div class="image-container bone <%= bones[boneIndex].className%>">
+                        <img src="assets/img/main/<%= bones[boneIndex].fileName %>">
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+    </script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        less = {
+            env: "development"
+        }
+    </script>
+    <script src="node_modules/less/dist/less.js"></script>
+    <script src="node_modules/underscore/underscore.js"></script>
+    <script>
+        (function () {
+            var pageTemplate = _.template($('#body').html());
+
+            var bone = function (name) {
+                return {
+                    className: name,
+                    fileName: name + ".png"
+                }
+            };
+
+            $('.container-fluid').html(pageTemplate({
+                bones: _.map([
+                        "arc-bone", "arc-lil-sibling", "sine-cavity-bone", "mussel-shell",
+                        "cloth", "spiral-shell", "saddle-bone", "funnel-bone", "overlapping-bones",
+                        "tooth", "parabolic-bone"
+                ], function (boneName) {
+                    return bone(boneName);
+                })
+            }));
+        })()
+    </script>
+    <script type="text/javascript" src="assets/js/index.js"></script>
+</body>
+</html>

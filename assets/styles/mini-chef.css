@@ -1,0 +1,142 @@
+@font-face {
+    font-family: 'DecimaMonoPro';
+    src: url('../fonts/DecimaMonoPro/DecimaMonoPro.eot');
+    src: url('../fonts/DecimaMonoPro/DecimaMonoPro.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/DecimaMonoPro/DecimaMonoPro.woff') format('woff'),
+    url('../fonts/DecimaMonoPro/DecimaMonoPro.ttf') format('truetype'),
+    url('../fonts/DecimaMonoPro/DecimaMonoPro.svg#Sri-TSCRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'DecimaMonoPro-Bold';
+    src: url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.eot');
+    src: url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.woff') format('woff'),
+    url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.ttf') format('truetype'),
+    url('../fonts/DecimaMonoPro-Bold/DecimaMonoPro-Bold.svg#Sri-TSCRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #f6e1ff;
+    margin: 0;
+    padding: 0;
+    font-family: "DecimaMonoPro", sans-serif;
+    font-size: 19px;
+    position: relative;
+}
+
+.row {
+    padding: 0 60px;
+}
+
+body {
+    background-color: #301a39;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+h1 {
+    margin-bottom: 60px;
+    font: normal 99px/100px "DecimaMonoPro-Bold", sans-serif;
+    color: #5dd2f8;
+    text-transform: uppercase;
+}
+
+.project-description {
+    line-height: 40px;
+}
+
+.main-img-col {
+    padding-right: 0;
+}
+
+.main-image {
+    left: -60px;
+    padding: 60px;
+    width: 100%;
+    background: #f2a6c7 url('../img/noise-pattern.png');
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.scroll {
+    position: absolute;
+    bottom: 29px;
+    left: 50%;
+    width: 62px;
+    margin-left: -31px;
+}
+
+.scroll div {
+    width: 2px;
+    height: 40px;
+    margin: 0 auto;
+    background: #f6e1ff;
+}
+
+.scroll span {
+    font: 14px/14px "DecimaMonoPro";
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.mini-chef-sideways {
+    position: absolute;
+    left: 0;
+    top: 450px;
+    display: inline-block;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(270deg);
+}
+
+.white-background {
+    background-color: #fff;
+    width: 100%;
+    padding: 60px 60px 155px 0;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.site-preview img {
+    display: block;
+    margin: 220px auto 0 auto;
+}
+
+.white-background img {
+    -webkit-box-shadow: 0 0 30px -4px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: 0 0 30px -4px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 30px -4px rgba(0, 0, 0, 0.8);
+}
+
+@media screen and (max-width: 1290px) {
+
+    .project-overview {
+        margin-left: 0;
+        padding-left: 0;
+        width: 33.33333333%;
+    }
+
+    .white-background {
+        margin-left: 0;
+    }
+
+    .mini-chef-sideways {
+        left: -20px;
+    }
+
+}
