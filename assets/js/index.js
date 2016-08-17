@@ -59,7 +59,7 @@ var coordinates = (function () {
     return that;
 })();
 
-var bonesSlideInAnimation = function (topSection, bones) {
+var bonesSlideInAnimation = function (topSection, bones, shared) {
     var setTransition = function (DOMElement, transitionValue) {
         DOMElement.css({
             '-webkit-transition': transitionValue,
@@ -70,7 +70,38 @@ var bonesSlideInAnimation = function (topSection, bones) {
         });
     };
 
+    var sign = function (number) {
+        if (number === 0) {
+            return 0
+        }
+        return Math.abs(number) / number
+    };
+
+    /**
+     * Takes a vector prolongs it so it's end would lie on a border of a block that it is contained within
+     * @param vector
+     * @param startingPoint, startingPoint of a vector, coordinates must be local to block
+     * @param {{top: number, left: number}} blockDimensions, height and width of a block
+     */
+
+    var extendVectorTOSide = function (vector, startingPoint, blockDimensions) {
+        var distanceTOSides = coordinates.subtract(blockDimensions, startingPoint);
+
+        if (Math.abs(vector.top / vector.left) > distanceTOSides.top / distanceTOSides.left) {
+            return coordinates.create(
+                vector.left * (distanceTOSides.top / Math.abs(vector.top)),
+                distanceTOSides.top * sign(vector.top)
+            )
+        } else {
+            return coordinates.create(
+                distanceTOSides.left * sign(vector.left),
+                vector.top * (distanceTOSides.left / Math.abs(vector.left))
+            )
+        }
+    };
+
     var topSectionDimensions = coordinates.create(topSection.width(), topSection.height());
+    var topSectionCenter = shared.blockCenter(topSection);
 
     var initialPositions = {};
 
@@ -81,12 +112,12 @@ var bonesSlideInAnimation = function (topSection, bones) {
     // hide every bone
     each(function () {
         var $this = $(this);
-        var position = $this.position();
+        var position = shared.blockCenter($this);
 
-        var shift = Math.min(position.top + $this.height(), position.left + $this.width());
-        shift = shift > 0 ? shift: 0;
-        var minimalTOHide = coordinates.subtract(position, coordinates.create(shift, shift));
-        $this.css(coordinates.multiplyByScalar(2, minimalTOHide));
+        var centerTOCurrentVector = coordinates.subtract(position, topSectionCenter);
+        var centerTOSide = extendVectorTOSide(centerTOCurrentVector, topSectionCenter, topSectionDimensions);
+        var currentTOSide = coordinates.subtract(centerTOSide, centerTOCurrentVector);
+        $this.css(coordinates.add(position, coordinates.multiplyByScalar(4, currentTOSide)));
     });
 
     // without this timeout transition property is set to the last element selected earlier than it is hidden
@@ -108,15 +139,7 @@ var bonesSlideInAnimation = function (topSection, bones) {
 
 var topSectionAnimation = function ($window, topSection) {
 
-    topSection.height($window.height());
-
-    // apparently safari stalls with setting height of a top section, so without this timeout
-    // every thing will be bundled together in upper left corner
-    setTimeout(function () {
-        bonesSlideInAnimation(topSection, $('.bones').find('.bone'));
-    }, 10);
-
-    var initialPosition = topSection.offset();
+    var shared = {};
 
     /**
      * Return an object containing create of a center of a block relative to document
@@ -124,14 +147,24 @@ var topSectionAnimation = function ($window, topSection) {
      * @returns {{left: number, top: number}}
      */
 
-    var blockCenterPos = function (block) {
-        var blockPos = block.offset();
+    shared.blockCenter = function (block) {
+        var blockPos = block.position();
 
         return coordinates.create(
             blockPos.left + block.width() / 2,
             blockPos.top + block.height() / 2
         );
     };
+
+    topSection.height($window.height());
+
+    // apparently safari stalls with setting height of a top section, so without this timeout
+    // every thing will be bundled together in upper left corner
+    setTimeout(function () {
+        bonesSlideInAnimation(topSection, $('.bones').find('.bone'), shared);
+    }, 10);
+
+    var initialPosition = topSection.offset();
 
     /**
      * Positions a block relative to center of a top section
@@ -141,14 +174,14 @@ var topSectionAnimation = function ($window, topSection) {
      */
 
     var makeConcentricMovement = function (event, centerBlock, movingBlock) {
-        var mouseTOCenterVector = coordinates.subtract(
+        var centerTOMouseVector = coordinates.subtract(
             {left: event.pageX, top: event.pageY},
-            blockCenterPos(centerBlock)
+            shared.blockCenter(centerBlock)
         );
 
         var destinationCoordinates = coordinates.add(
             initialPosition,
-            coordinates.multiplyByScalar(-0.1, mouseTOCenterVector)
+            coordinates.multiplyByScalar(-0.1, centerTOMouseVector)
         );
 
         movingBlock.css(destinationCoordinates);
