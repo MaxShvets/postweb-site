@@ -2,7 +2,7 @@ var coordinates = (function () {
     var that = {};
 
     /**
-    * Creates a create object
+    * Creates a coordinates object
     * @param left
     * @param top
     * @returns {{left: number, top: number}}
@@ -14,8 +14,8 @@ var coordinates = (function () {
 
     /**
      * Subtracts create of one create objects from create of other coordinate object
-     * @param coords
-     * @param otherCoords
+     * @param {{left: number, top: number}} coords
+     * @param {{left: number, top: number}} otherCoords
      * @returns {{left, top}|{left: number, top: number}}
      */
 
@@ -23,19 +23,37 @@ var coordinates = (function () {
         return that.create(coords.left + otherCoords.left, coords.top + otherCoords.top)
     };
 
+    /**
+     * Multiplies coordinates by scalar
+     * @param {number} scalar
+     * @param {{left: number, top: number}} coords
+     * @returns {{left, top}|{left: number, top: number}}
+     */
+
     that.multiplyByScalar = function (scalar, coords) {
         return that.create(coords.left * scalar, coords.top * scalar)
     };
 
     /**
-     * Calculates coordinates of a vector that goes from point to another point
-     * @param {{left: number, top: number}} firstPoint
-     * @param {{left: number, top: number}} secondPoint
+     * Subtracts corresponding coordinates of points
+     * @param {{left: number, top: number}} point
+     * @param {{left: number, top: number}} otherPoint
      * @returns {{left: number, top: number}}
      */
 
-    that.subtract = function (firstPoint, secondPoint) {
-        return that.add(firstPoint, that.multiplyByScalar(-1, secondPoint))
+    that.subtract = function (point, otherPoint) {
+        return that.add(point, that.multiplyByScalar(-1, otherPoint))
+    };
+
+    /**
+     * Divides coordinates of one point by corresponding coordinates of other point
+     * @param point
+     * @param otherPoint
+     * @returns {{left, top}|{left: number, top: number}}
+     */
+
+    that.divide = function (point, otherPoint) {
+        return that.create(point.left / otherPoint.left, point.top / otherPoint.top)
     };
 
     return that;
@@ -52,21 +70,15 @@ var bonesSlideInAnimation = function (topSection, bones) {
         });
     };
 
-    var distanceMultiplicator = function (bonePos, containerDimensions) {
-        var differences = coordinates.subtract(containerDimensions, bonePos);
-        return Math.sqrt(differences.top ^ 2 + differences.left ^ 2);
-    };
-
-    var containerDimensions = coordinates.create({
-        top: topSection.height(),
-        left: topSection.width()
-    });
+    var topSectionDimensions = coordinates.create(topSection.width(), topSection.height());
 
     var initialPositions = {};
 
+    // record initial position of each bone
     bones.each(function () {
         initialPositions[$(this).attr('class')] = $(this).position();
     }).
+    // hide every bone
     each(function () {
         var $this = $(this);
         var position = $this.position();
@@ -74,22 +86,36 @@ var bonesSlideInAnimation = function (topSection, bones) {
         var shift = Math.min(position.top + $this.height(), position.left + $this.width());
         shift = shift > 0 ? shift: 0;
         var minimalTOHide = coordinates.subtract(position, coordinates.create(shift, shift));
-        $this.css(coordinates.multiplyByScalar(distanceMultiplicator(position, containerDimensions), minimalTOHide));
-    }).
-    each(function () {
-        setTransition($(this), 'top 0.5s, left 0.5s');
-    }).
-    each(function () {
-        var $this = $(this);
-        var className = $this.attr('class');
+        $this.css(coordinates.multiplyByScalar(2, minimalTOHide));
+    });
 
-        $this.css(initialPositions[className]);
-    })
+    // without this timeout transition property is set to the last element selected earlier than it is hidden
+    // so it appears as it is not moving at all
+    setTimeout(function () {
+        setTransition(bones, "top 1s, left 1s");
+        bones.css('visibility', 'visible');
+
+        bones.each(function () {
+            var $this = $(this);
+            var className = $this.attr('class');
+            var initialPosition = coordinates.multiplyByScalar(100, initialPositions[className]);
+            var positionINPercent = coordinates.divide(initialPosition, topSectionDimensions);
+
+            $this.css(coordinates.add(positionINPercent, coordinates.create("%", "%")));
+        });
+    }, 1);
 };
 
 var topSectionAnimation = function ($window, topSection) {
 
     topSection.height($window.height());
+
+    // apparently safari stalls with setting height of a top section, so without this timeout
+    // every thing will be bundled together in upper left corner
+    setTimeout(function () {
+        bonesSlideInAnimation(topSection, $('.bones').find('.bone'));
+    }, 10);
+
     var initialPosition = topSection.offset();
 
     /**
@@ -133,9 +159,12 @@ var topSectionAnimation = function ($window, topSection) {
      * @param {{Event}} event
      */
 
-    var moveBones = function (event) {
-        makeConcentricMovement(event, topSection, topSection.find('.bones'));
-    };
+    var moveBones = (function () {
+        var bones = topSection.find('.bones');
+        return function (event) {
+            makeConcentricMovement(event, topSection, bones);
+        }
+    })();
 
     var resizeTimeout;
 
@@ -151,12 +180,11 @@ var topSectionAnimation = function ($window, topSection) {
 
 };
 
-$(document).ready(function () {
+$(window).on("load", function () {
     var $window = $(window);
     var topSection = $('.top-section');
 
     topSectionAnimation($window, topSection);
-    bonesSlideInAnimation(topSection, $('.bones').find('.bone'));
 
     $window.mousemove();
 });

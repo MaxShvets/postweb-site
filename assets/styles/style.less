@@ -26,7 +26,6 @@
 
 .top-section {
     background: #fef9f4 url('../img/creamy-noise-pattern.png');
-    .transition(height 100ms);
     overflow: hidden;
 }
 
@@ -47,10 +46,13 @@
         width: @width;
         top: @top;
         left: @left;
+        visibility: hidden;
     }
 }
 
 .bones {
+    top: 0;
+    left: 0;
     .background();
     .transition(~"top 0.5s ease-out, left 0.5s ease-out");
 
