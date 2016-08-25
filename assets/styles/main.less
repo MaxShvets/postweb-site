@@ -1,0 +1,254 @@
+@import "fonts.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    color: #37519b;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+}
+
+@top-color: #ffe8e1;
+
+.transition(@value) {
+    -webkit-transition: @value;
+    -moz-transition: @value;
+    -ms-transition: @value;
+    -o-transition: @value;
+    transition: @value;
+}
+
+.transition-delay(@time) {
+    -webkit-transition-delay: @time;
+    -moz-transition-delay: @time;
+    -ms-transition-delay: @time;
+    -o-transition-delay: @time;
+    transition-delay: @time;
+}
+
+.shadow(@value) {
+    -webkit-box-shadow: @value;
+    -moz-box-shadow: @value;
+    box-shadow: @value;
+}
+
+.image-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.top-section {
+    background: #fef9f4 url('../img/creamy-noise-pattern.png');
+    overflow: hidden;
+}
+
+.background() {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.background-rectangle {
+    .background();
+    padding: 60px;
+    background: #ffe8e1 content-box;
+    z-index: 1;
+}
+
+.image(@class, @width, @left, @top) {
+    .@{class} {
+        width: @width;
+        top: @top;
+        left: @left;
+    }
+}
+
+@top-section-transition-time: 0.5s;
+
+.bones {
+    top: 0;
+    left: 0;
+    .background();
+    .transition(~"top 0.5s ease-out, left 0.5s ease-out");
+    z-index: 2;
+
+    div {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    .image(arc-bone, 29.861111111%, -2.1527777778%, 1.6666666667%);
+    .image(arc-lil-sibling, 18.402777778%, 9.7916666667%, 11.222222222%);
+    .image(sine-cavity-bone, 42.986111111%, 13.888888889%, 3.5555555556%);
+    .image(mussel-shell, 23.333333333%, 54.375%, -3.5555555556%);
+    .image(cloth, 48.472222222%, 53.402777778%, 22%);
+    .image(spiral-shell, 28.680555556%, 74.236111111%, 55.555555556%);
+    .image(saddle-bone, 38.055555556%, 37.291666667%, 58.777777778%);
+    .image(funnel-bone, 40.347222222%, 3.3333333333%, 53.333333333%);
+    .image(overlapping-bones, 31.111111111%, -4.583333333%, 43%);
+    .image(tooth, 11.319444444%, 2.5%, 29.777777778%);
+    .image(parabolic-bone, 15.138888889%, 42.430555556%, 47.333333333%);
+}
+
+.logo-container {
+
+    position: relative;
+    z-index: 3;
+    top: 47.777777778%;
+    margin-top: -171px;
+
+    .image-container {
+        margin: 0 auto;
+    }
+
+    .logo, .heading, .second-heading {
+        z-index: 2;
+    }
+
+    .logo {
+        max-width: 74px;
+    }
+
+    .logo-background {
+        position: absolute;
+        height: 266px;
+        top: 100px;
+        z-index: 1;
+
+        .wave-block {
+            top: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 2;
+            .shadow(0 5px 20px -5px rgba(0, 0, 0, 0.4));
+            .transition(~"height @{top-section-transition-time}, top @{top-section-transition-time}");
+        }
+
+        .wave-block:before {
+            .transition(~"height @{top-section-transition-time}, bottom @{top-section-transition-time}, background-position @{top-section-transition-time}");
+        }
+
+        .dots {
+            position: absolute;
+            top: 51px;
+            left: -88px;
+            height: 100%;
+            width: 100%;
+            background: url('../img/dots.png') repeat;
+            z-index: 1;
+        }
+    }
+
+    .heading {
+        max-width: 537px;
+        padding: 40px 10px 47px 10px;
+    }
+
+    .second-heading {
+        font: 24px/30px "DecimaMonoPro", sans-serif;
+        text-align: center;
+
+        span {
+            font-family: "DecimaMonoPro-Bold", sans-serif;
+            color: #f57090;
+        }
+    }
+}
+
+.scroll {
+    z-index: 3;
+
+    div {
+        background-color: #37519b;
+        .transition(height @top-section-transition-time);
+    }
+}
+
+.shape(@class, @width, @height, @left, @top) {
+    .@{class} {
+        top: @top;
+        left: @left;
+        margin: -@height/2 0 0 -@width/2;
+    }
+}
+
+.shape-rb(@class, @width, @height, @right, @bottom) {
+    .@{class} {
+        bottom: @bottom;
+        right: @right;
+        margin: 0 -@width/2 -@height/2 0;
+    }
+}
+
+.small-shapes-layer {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 4;
+
+    .small-shapes-container {
+        .background();
+        .transition(~"top 0.5s ease-out, left 0.5s ease-out");
+        top: 0;
+        left: 0;
+
+        div {
+            position: absolute;
+            display: inline-block;
+            opacity: 1;
+            .transition(opacity 250ms);
+
+            &:hover {
+                opacity: 0;
+            }
+        }
+    }
+
+    .shape(arc, 0, 52px, 38px, 45.666666667%);
+    .shape-rb(smaller-arc, 0, 45px, 38px, 59.666666667%);
+    .shape(blue-zigzag, 28px, 0, 31.111111111%, 47px);
+    .shape(blue-cross, 23px, 0, 74.444444444%, 49px);
+    .shape-rb(pink-zigzag, 45px, 0, 77.638888889%, 45px);
+    .shape-rb(side-dots, 0, 0, 34px, 4px);
+
+    .line {
+        position: absolute;
+        top: 47.777777778%;
+        right: 50%;
+        margin: -80px -254px 0 0;
+        width: 58px;
+        height: 4px;
+        background-color: #37519b;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+}
+
+.pre-animation {
+    .logo-background {
+        .wave-block {
+            height: 0;
+            top: 50%;
+        }
+
+        .wave-block:before {
+            height: 0;
+            bottom: 0;
+            background-position: 0 0;
+        }
+    }
+
+    .scroll {
+        div {
+            height: 0;
+        }
+    }
+}

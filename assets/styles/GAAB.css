@@ -63,21 +63,6 @@ h3 {
 
 .wave-block {
     font: 24px/40px "DecimaMonoPro", sans-serif;
-    background-color: #fff;
-    -webkit-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
-}
-
-.wave-block:before {
-    content: "";
-    height: 4px;
-    width: 100%;
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    background: url('../img/GAAB/wave.png') center;
-    z-index: 2;
 }
 
 .blue-waves:after {

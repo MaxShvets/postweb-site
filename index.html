@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Projects</title>
     <link href="assets/styles/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/styles/style.less" rel="stylesheet/less">
+    <link href="assets/styles/style.css" rel="stylesheet">
+    <link href="assets/styles/main.less" rel="stylesheet/less">
 </head>
 <body>
 
@@ -12,7 +13,18 @@
 
     <script id="body" type="text/html">
 
-        <div class="row top-section">
+        <div class="small-shapes-layer">
+            <div class="small-shapes-container">
+                <% for (var shapeIndex = 0; shapeIndex < smallShapes.length; shapeIndex++) { %>
+                <div class="image-container <%= smallShapes[shapeIndex].className%>">
+                    <img src="assets/img/main/<%= smallShapes[shapeIndex].fileName %>">
+                </div>
+                <% } %>
+                <div class="line"></div>
+            </div>
+        </div>
+
+        <div class="row top-section pre-animation">
             <div class="background-rectangle"></div>
 
             <div class="bones">
@@ -22,7 +34,34 @@
                     </div>
                 <% } %>
             </div>
+
+            <div class="col-sm-12 col-sm-push-6 logo-container">
+                <div class="image-container logo">
+                    <img src="assets/img/postweb-logo.png">
+                </div>
+
+                <div class="logo-background col-sm-16 col-sm-push-8 no-gutter">
+                    <div class="wave-block"></div>
+                    <div class="dots"></div>
+                </div>
+
+                <div class="image-container heading">
+                    <img src="assets/img/main/postweb-heading.png">
+                </div>
+
+                <p class="second-heading">
+                    meet <span>creative</span><br>
+                    digital  production
+                </p>
+            </div>
+
+            <div class="scroll">
+                <div></div>
+                <span>scroll</span>
+            </div>
         </div>
+
+        <div style="height: 2000px;"></div>
 
     </script>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -37,7 +76,7 @@
         (function () {
             var pageTemplate = _.template($('#body').html());
 
-            var bone = function (name) {
+            var image = function (name) {
                 return {
                     className: name,
                     fileName: name + ".png"
@@ -49,9 +88,11 @@
                         "arc-bone", "arc-lil-sibling", "sine-cavity-bone", "mussel-shell",
                         "cloth", "spiral-shell", "saddle-bone", "funnel-bone", "overlapping-bones",
                         "tooth", "parabolic-bone"
-                ], function (boneName) {
-                    return bone(boneName);
-                })
+                ], image),
+                smallShapes: _.map([
+                        "blue-zigzag", "pink-zigzag", "blue-cross", "arc", "side-dots", "smaller-arc"
+                ], image)
+
             }));
         })()
     </script>

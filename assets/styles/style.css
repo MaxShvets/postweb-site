@@ -1,0 +1,43 @@
+.wave-block {
+    background-color: #fff;
+    -webkit-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+}
+
+.wave-block:before {
+    content: "";
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    background: url('../img/GAAB/wave.png') center;
+    z-index: 2;
+}
+
+.no-gutter {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.scroll {
+    position: absolute;
+    bottom: 29px;
+    left: 50%;
+    width: 62px;
+    margin-left: -31px;
+}
+
+.scroll div {
+    width: 2px;
+    height: 40px;
+    margin: 0 auto;
+    background: #f6e1ff;
+}
+
+.scroll span {
+    font: 14px/14px "DecimaMonoPro";
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}

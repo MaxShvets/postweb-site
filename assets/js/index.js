@@ -59,7 +59,22 @@ var coordinates = (function () {
     return that;
 })();
 
-var bonesSlideInAnimation = function (topSection, bones, shared) {
+/**
+ * Return an object containing create of a center of a block relative to document
+ * @param {Object} block, jQuery object
+ * @returns {{left: number, top: number}}
+ */
+
+blockCenter = function (block) {
+    var blockPos = block.position();
+
+    return coordinates.create(
+        blockPos.left + block.width() / 2,
+        blockPos.top + block.height() / 2
+    );
+};
+
+var bonesSlideInAnimation = function (topSection, bones) {
     var setTransition = function (DOMElement, transitionValue) {
         DOMElement.css({
             '-webkit-transition': transitionValue,
@@ -101,7 +116,7 @@ var bonesSlideInAnimation = function (topSection, bones, shared) {
     };
 
     var topSectionDimensions = coordinates.create(topSection.width(), topSection.height());
-    var topSectionCenter = shared.blockCenter(topSection);
+    var topSectionCenter = blockCenter(topSection);
 
     var initialPositions = {};
 
@@ -112,12 +127,12 @@ var bonesSlideInAnimation = function (topSection, bones, shared) {
     // hide every bone
     each(function () {
         var $this = $(this);
-        var position = shared.blockCenter($this);
+        var position = blockCenter($this);
 
-        var centerTOCurrentVector = coordinates.subtract(position, topSectionCenter);
-        var centerTOSide = extendVectorTOSide(centerTOCurrentVector, topSectionCenter, topSectionDimensions);
-        var currentTOSide = coordinates.subtract(centerTOSide, centerTOCurrentVector);
-        $this.css(coordinates.add(position, coordinates.multiplyByScalar(4, currentTOSide)));
+        var centerTOCurrent = coordinates.subtract(position, topSectionCenter);
+        var centerTOSide = extendVectorTOSide(centerTOCurrent, topSectionCenter, topSectionDimensions);
+        var currentTOHidden = coordinates.subtract(coordinates.multiplyByScalar(2, centerTOSide), centerTOCurrent);
+        $this.css(coordinates.add(position, currentTOHidden));
     });
 
     // without this timeout transition property is set to the last element selected earlier than it is hidden
@@ -137,67 +152,57 @@ var bonesSlideInAnimation = function (topSection, bones, shared) {
     }, 1);
 };
 
-var topSectionAnimation = function ($window, topSection) {
+var concentricMovement = (function () {
 
-    var shared = {};
+    var that = {};
 
     /**
-     * Return an object containing create of a center of a block relative to document
-     * @param {Object} block, jQuery object
-     * @returns {{left: number, top: number}}
+     * Positions a block relative to center of a top section
+     * @param {{Object}} event, javascript event object
+     * @param {{jQuery Object}} container, block relative to center of which moving element is positioned
+     * @param {{jQuery Object}} block, block to be moved
+     * @param {{Object}} initialPosition, initial position of the moving block
+     * @param {{number}} imitationCoefficient, number that defines how actively will block respond to mouse movement
      */
 
-    shared.blockCenter = function (block) {
-        var blockPos = block.position();
-
-        return coordinates.create(
-            blockPos.left + block.width() / 2,
-            blockPos.top + block.height() / 2
+    var makeConcentricMovement = function (event, container, block, initialPosition, imitationCoefficient) {
+        var centerTOMouseVector = coordinates.subtract(
+            coordinates.subtract(coordinates.create(event.pageX, event.pageY), container.offset()),
+            blockCenter(container)
         );
+
+        var destinationCoordinates = coordinates.add(
+            initialPosition,
+            coordinates.multiplyByScalar(imitationCoefficient, centerTOMouseVector)
+        );
+
+        block.css(destinationCoordinates);
     };
 
+    /**
+     * Creates an event handler that will move block relative to center of another block according to mouse movement
+     */
+
+    that.create = function (container, block, imitationCoefficient) {
+        var initialPosition = block.position();
+
+        return function (event) {
+            makeConcentricMovement(event, container, block, initialPosition, imitationCoefficient);
+        }
+    };
+
+    return that;
+
+})();
+
+var topSectionAnimation = function ($window, topSection) {
     topSection.height($window.height());
 
     // apparently safari stalls with setting height of a top section, so without this timeout
     // every thing will be bundled together in upper left corner
     setTimeout(function () {
-        bonesSlideInAnimation(topSection, $('.bones').find('.bone'), shared);
+        bonesSlideInAnimation(topSection, $('.bones').find('.bone'));
     }, 10);
-
-    var initialPosition = topSection.offset();
-
-    /**
-     * Positions a block relative to center of a top section
-     * @param {{Object}} event, javascript event object
-     * @param {{jQuery Object}} centerBlock, block relative to center of which moving element is positioned
-     * @param {{jQuery Object}} movingBlock, block to be moved
-     */
-
-    var makeConcentricMovement = function (event, centerBlock, movingBlock) {
-        var centerTOMouseVector = coordinates.subtract(
-            {left: event.pageX, top: event.pageY},
-            shared.blockCenter(centerBlock)
-        );
-
-        var destinationCoordinates = coordinates.add(
-            initialPosition,
-            coordinates.multiplyByScalar(-0.1, centerTOMouseVector)
-        );
-
-        movingBlock.css(destinationCoordinates);
-    };
-
-    /**
-     * Moves background block with bone like objects in it
-     * @param {{Event}} event
-     */
-
-    var moveBones = (function () {
-        var bones = topSection.find('.bones');
-        return function (event) {
-            makeConcentricMovement(event, topSection, bones);
-        }
-    })();
 
     var resizeTimeout;
 
@@ -209,8 +214,126 @@ var topSectionAnimation = function ($window, topSection) {
             topSection.height($window.height());
         }, 20);
     }).
-    mousemove(moveBones);
+    mousemove(concentricMovement.create(topSection, $('.bones'), -0.1)).
+    mousemove(concentricMovement.create($('.small-shapes-layer'), $('.small-shapes-container'), 0.02));
+    topSection.removeClass('pre-animation');
 
+};
+
+var pageSegment = function ($window) {
+    var that = {};
+
+    var createEndpoint = function (endpoints, endpoint, endpointNum, updateCause) {
+        if (typeof endpoint !== "number") {
+            $window.on(updateCause, function () {
+                endpoints[endpointNum] = endpoint();
+            });
+
+            return endpoint();
+        }
+
+        return endpoint;
+    };
+
+    that.create = function (lowerEndpoint, upperEndpoint, updateCause) {
+        var endpoints = [];
+
+        endpoints[0] = createEndpoint(endpoints, lowerEndpoint, 0, updateCause);
+        endpoints[1] = createEndpoint(endpoints, upperEndpoint, 1, updateCause);
+
+        return endpoints;
+    };
+
+    return that;
+};
+
+var scrollTasksConstructor = function ($window) {
+    var that = {};
+    var tasks = [];
+
+    $window.on('scroll', function () {
+        var scrollTop = $window.scrollTop();
+
+        for (var taskIndex = 0; taskIndex < tasks.length; taskIndex++) {
+            tasks[taskIndex](scrollTop)
+        }
+    });
+
+    /**
+     * Determines if number belongs to an interval
+     * @param {{Array}} interval, array of two values defining boundaries of a interval
+     * @param {{number}} number
+     * @returns {boolean}
+     */
+
+    var numberInInterval = function (interval, number) {
+        return interval[0] <= number && number <= interval[1];
+    };
+
+    /**
+     * Takes a function that takes a scrollTop as an argument that will be run every time scrollTop is
+     * within some interval, bound to DOMObject passed
+     * @param {{jQuery Object}} DOMObject, block that the function will be bound to
+     * @param pageSegment, page segment in which the task should be executed
+     * @param taskFunc, function that takes scroll top as a parameter
+     */
+
+    that.assign = function (DOMObject, pageSegment, taskFunc) {
+        var boundTask = taskFunc.bind(DOMObject);
+        var triggeredAtEndpoint = false;
+
+        tasks.push(function (scrollTop) {
+            if (numberInInterval(pageSegment, scrollTop)) {
+                triggeredAtEndpoint = false;
+                boundTask(scrollTop - pageSegment[0], pageSegment[1]);
+            } else if (!triggeredAtEndpoint) {
+                triggeredAtEndpoint = true;
+                boundTask(pageSegment[1], pageSegment[1]);
+            }
+        });
+    };
+
+    return that;
+};
+
+var scroll = function ($window, topSection) {
+    var scrollTasks = scrollTasksConstructor($window);
+    var pageSegments = pageSegment($window);
+
+    var topSectionSegment = pageSegments.create(
+        0, function () {
+            return topSection.height();
+        }, "resize"
+    );
+
+    scrollTasks.assign($('.background-rectangle'), topSectionSegment, function (scrollTop, upperEndpoint) {
+        var invertedScrollProgress = 1 - scrollTop / upperEndpoint;
+        var valueInPercent = (100 * invertedScrollProgress);
+
+        this.css({
+            'opacity': invertedScrollProgress,
+            'height': valueInPercent + "%",
+            'width': valueInPercent + "%",
+            'margin-left': ((100 - valueInPercent) / 2) + "%"
+        })
+    });
+
+    scrollTasks.assign($('.small-shapes-layer'), topSectionSegment, function (scrollTop, upperEndpoint) {
+        this.css("opacity", 1 - scrollTop / upperEndpoint);
+    });
+
+    scrollTasks.assign($('.scroll'), pageSegments.create(0, 1), function (scrollTop, upperEndpoint) {
+        if (scrollTop === 0) {
+            this.css('display', 'block');
+        } else {
+            this.css('display', 'none');
+        }
+    });
+
+    // bind scroll to resize, so that properties that depend on scroll dynamically update after resize
+    $window.on('resize', function () {
+        $window.scroll();
+    })
 };
 
 $(window).on("load", function () {
@@ -219,5 +342,8 @@ $(window).on("load", function () {
 
     topSectionAnimation($window, topSection);
 
+    scroll($window, topSection);
+
     $window.mousemove();
+    $window.scroll();
 });
